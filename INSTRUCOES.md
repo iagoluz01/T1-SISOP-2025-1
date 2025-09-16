@@ -1,43 +1,57 @@
-# Instruções para Executar o Simulador de Escalonamento de Processos
+# Instruções para o Simulador de Escalonamento de Processos (Terminal)
 
 ## Requisitos
-- Um navegador web moderno (Chrome, Firefox, Edge, Safari)
-- Não é necessário nenhum servidor web ou instalação adicional
+- Java Development Kit (JDK) 17 ou superior
+- Terminal de comando (Command Prompt, PowerShell, Bash, etc.)
 
-## Passos para Executar
+## Como Compilar e Executar
 
-1. **Abrir o simulador**:
-   - Navegue até a pasta do projeto `C:\Users\I554709\WebstormProjects\T1-SISOP-2025-1`
-   - Clique duas vezes no arquivo `index.html` para abri-lo em seu navegador web
-   - Alternativamente, você pode arrastar o arquivo `index.html` para uma janela do navegador
+### No Windows:
+1. Abra um terminal na pasta do projeto
+2. Execute:
+   ```
+   compile_and_run.bat
+   ```
 
-2. **Configurar o Quantum**:
-   - No painel de configurações à esquerda, defina o valor do quantum para processos de tempo real
-   - O valor padrão é 2, mas você pode ajustá-lo conforme necessário
+### No Linux/macOS:
+1. Abra um terminal na pasta do projeto
+2. Compile:
+   ```
+   mkdir -p bin
+   javac -d bin src/*.java
+   ```
+3. Execute:
+   ```
+   java -cp bin Main
+   ```
 
-3. **Adicionar Processos**:
-   - Preencha o formulário de adição de processos:
-     - Nome: Um identificador para o processo
-     - Tempo de chegada: Momento em que o processo deve entrar no sistema
-     - Tipo: Escolha entre "Tempo Real" ou "Melhor Esforço"
-     - Prioridade: Para processos de tempo real, escolha entre Alta (0) ou Baixa (1)
-     - Código Assembly: Escreva o código do processo usando a linguagem assembly hipotética
+## Usando o Simulador no Terminal
 
-4. **Controlar a Simulação**:
-   - Iniciar: Começa a simulação automática com intervalos de 1 segundo
-   - Pausar: Interrompe a simulação automática
-   - Avançar: Executa um único passo da simulação
-   - Reiniciar: Limpa todos os processos e reinicia o tempo
+O simulador apresenta um menu com as seguintes opções:
 
-5. **Interagir com Processos**:
-   - Quando um processo solicita entrada (SYSCALL 2), digite o valor na caixa de entrada e clique em "Enviar"
-   - Para testar a funcionalidade especial, digite "0101" na entrada quando solicitado
+1. **Configurar quantum**: Define o quantum para processos de tempo real
+2. **Adicionar processo**: Adiciona um novo processo ao simulador
+3. **Iniciar simulação**: Inicia a simulação automática
+4. **Pausar simulação**: Pausa a simulação automática
+5. **Avançar um passo**: Executa um único passo da simulação
+6. **Reiniciar simulação**: Limpa todos os processos e reinicia o tempo
+7. **Exibir processos**: Mostra o estado atual de todos os processos
+8. **Sair**: Encerra o simulador
 
-## Exemplo de Código Assembly
+### Adicionando um Processo
 
-Você pode testar o simulador com os seguintes exemplos de código:
+Ao selecionar a opção de adicionar um processo, você deverá fornecer:
 
-### Exemplo 1: Contagem regressiva e impressão
+1. Nome do processo (opcional)
+2. Tempo de chegada
+3. Tipo do processo (tempo real ou melhor esforço)
+4. Prioridade (apenas para processos de tempo real)
+5. Código assembly do processo
+
+Para inserir o código assembly, digite-o linha por linha. Quando terminar, digite `END` em uma linha separada para finalizar a entrada do código.
+
+### Exemplo de Código Assembly
+
 ```
 .code
   LOAD variable
@@ -52,41 +66,24 @@ Você pode testar o simulador com os seguintes exemplos de código:
 .enddata
 ```
 
-### Exemplo 2: Leitura de entrada e impressão
-```
-.code
-  SYSCALL 2
-  SYSCALL 1
-  SYSCALL 0
-.endcode
+Após digitar esse código, digite `END` para finalizar.
 
-.data
-.enddata
-```
+### Chamadas de Sistema (SYSCALL)
 
-### Exemplo 3: Teste da função especial (Ola)
-```
-.code
-  SYSCALL 2
-  SYSCALL 1
-  SYSCALL 0
-.endcode
+- **SYSCALL 0**: Termina o processo
+- **SYSCALL 1**: Imprime o valor do acumulador
+- **SYSCALL 2**: Solicita entrada do usuário
 
-.data
-.enddata
-```
-Para este exemplo, digite "0101" quando solicitada uma entrada.
+### Função Especial "Ola"
 
-## Observando a Simulação
+Para testar a funcionalidade especial que imprime "Ola", forneça o valor `0101` quando um processo solicitar entrada (após uma chamada SYSCALL 2).
 
-- A área de saída mostra os valores impressos pelos processos
-- Os painéis de estado mostram os processos em cada estado (pronto, executando, bloqueado, finalizado)
-- Para cada processo, você pode ver informações como tempo de execução, tempo de espera e quantum restante
+### Visualizando o Estado da Simulação
 
-## Notas Importantes
+Use a opção 7 do menu para exibir o estado atual de todos os processos:
+- Filas de processos prontos (tempo real e melhor esforço)
+- Processo em execução
+- Processos bloqueados
+- Processos finalizados
 
-- Os processos de tempo real têm prioridade sobre os de melhor esforço
-- Um processo de melhor esforço será interrompido se um processo de tempo real ficar pronto
-- Processos bloqueados (após operações de E/S) permanecem nesse estado por 3-5 unidades de tempo
-- Quando você digita "0101" em qualquer entrada solicitada por um processo, "Ola" será exibido na área de saída
-
+Para cada processo, são mostrados detalhes como ID, nome, tipo, prioridade, tempo de execução e tempo de espera.
