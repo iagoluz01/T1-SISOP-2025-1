@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador de Escalonamento de Processos</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Simulador de Escalonamento de Processos</h1>
+
+    <div class="container">
+        <div class="config-panel">
+            <h2>Configurações</h2>
+            <div class="quantum-config">
+                <label for="quantum">Quantum:</label>
+                <input type="number" id="quantum" value="2" min="1">
+            </div>
+
+            <h3>Adicionar Processo</h3>
+            <div class="process-form">
+                <div>
+                    <label for="processName">Nome:</label>
+                    <input type="text" id="processName">
+                </div>
+                <div>
+                    <label for="arrivalTime">Tempo de chegada:</label>
+                    <input type="number" id="arrivalTime" min="0" value="0">
+                </div>
+                <div>
+                    <label for="processType">Tipo:</label>
+                    <select id="processType">
+                        <option value="realtime">Tempo Real</option>
+                        <option value="besteffort">Melhor Esforço</option>
+                    </select>
+                </div>
+                <div id="priorityDiv">
+                    <label for="priority">Prioridade:</label>
+                    <select id="priority">
+                        <option value="0">Alta (0)</option>
+                        <option value="1" selected>Baixa (1)</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="codeEditor">Código Assembly:</label>
+                    <textarea id="codeEditor" rows="10" placeholder=".code
+  LOAD #10
+  SYSCALL 1
+  SYSCALL 0
+.endcode
+
+.data
+.enddata"></textarea>
+                </div>
+                <button id="addProcess">Adicionar Processo</button>
+            </div>
+        </div>
+
+        <div class="simulation-panel">
+            <h2>Simulação</h2>
+            <div class="controls">
+                <button id="startSimulation">Iniciar</button>
+                <button id="pauseSimulation">Pausar</button>
+                <button id="stepSimulation">Avançar</button>
+                <button id="resetSimulation">Reiniciar</button>
+            </div>
+            <div class="time-display">
+                <span>Tempo atual: </span><span id="currentTime">0</span>
+            </div>
+
+            <div class="io-panel">
+                <div class="output-area">
+                    <h3>Saída</h3>
+                    <div id="outputConsole"></div>
+                </div>
+                <div class="input-area">
+                    <h3>Entrada</h3>
+                    <input type="text" id="inputField" placeholder="Digite um valor inteiro">
+                    <button id="submitInput">Enviar</button>
+                </div>
+            </div>
+
+            <h3>Estado dos Processos</h3>
+            <div class="queues">
+                <div class="queue">
+                    <h4>Fila de Tempo Real</h4>
+                    <div id="realtimeQueue" class="queue-display"></div>
+                </div>
+                <div class="queue">
+                    <h4>Fila de Melhor Esforço</h4>
+                    <div id="besteffortQueue" class="queue-display"></div>
+                </div>
+            </div>
+
+            <h3>Processos em Execução</h3>
+            <div id="runningProcess" class="process-display"></div>
+
+            <h3>Processos Bloqueados</h3>
+            <div id="blockedProcesses" class="process-display"></div>
+
+            <h3>Processos Finalizados</h3>
+            <div id="finishedProcesses" class="process-display"></div>
+        </div>
+    </div>
+
+    <script src="js/assemblyInterpreter.js"></script>
+    <script src="js/processManager.js"></script>
+    <script src="js/processScheduler.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
+
