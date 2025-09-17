@@ -46,27 +46,7 @@ Ao selecionar a opção de adicionar um processo, você deverá fornecer:
 2. Tempo de chegada
 3. Tipo do processo (tempo real ou melhor esforço)
 4. Prioridade (apenas para processos de tempo real)
-5. Código assembly do processo
-
-Para inserir o código assembly, digite-o linha por linha. Quando terminar, digite `END` em uma linha separada para finalizar a entrada do código.
-
-### Exemplo de Código Assembly
-
-```
-.code
-  LOAD variable
-  ponto1: SUB #1
-  SYSCALL 1
-  BRPOS ponto1
-  SYSCALL 0
-.endcode
-
-.data
-  variable 10
-.enddata
-```
-
-Após digitar esse código, digite `END` para finalizar.
+5. Nome do arquivo com código assembly que deseja rodar
 
 ### Chamadas de Sistema (SYSCALL)
 

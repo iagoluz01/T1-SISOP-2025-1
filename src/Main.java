@@ -4,6 +4,8 @@ import java.util.TimerTask;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class Main {
     private static ProcessManager processManager;
@@ -49,7 +51,7 @@ public class Main {
     private static void displayMenu() {
         System.out.println("\n----- Menu -----");
         System.out.println("1. Configurar quantum");
-        System.out.println("2. Adicionar processo");
+        System.out.println("2. Adicionar processo (de um arquivo)");
         System.out.println("3. Iniciar simulação");
         System.out.println("4. Pausar simulação");
         System.out.println("5. Avançar um passo");
@@ -91,15 +93,18 @@ public class Main {
                 priority = (priorityOption == 1) ? 0 : 1;
             }
 
-            System.out.println("Digite o código assembly do processo (termine com 'END'):");
-            StringBuilder codeBuilder = new StringBuilder();
-            String line;
-            while (!(line = scanner.nextLine()).equalsIgnoreCase("END")) {
-                codeBuilder.append(line).append("\n");
-            }
-            String code = codeBuilder.toString().trim();
+            System.out.print("Digite o caminho do arquivo de código assembly (ex: prog1.txt): ");
+            String filePath = scanner.nextLine().trim();
+            String code = "";
 
-            if (code.isEmpty()) {
+            try {
+                code = new String(Files.readAllBytes(Paths.get(filePath)));
+            } catch (IOException e) {
+                System.out.println("Erro ao ler o arquivo: " + e.getMessage());
+                return;
+            }
+
+            if (code.trim().isEmpty()) {
                 System.out.println("O código não pode estar vazio!");
                 return;
             }
@@ -135,13 +140,21 @@ public class Main {
                     System.out.println("[" + processManager.getCurrentTime() + "] " +
                         process.getName() + " bloqueado por " + printBlockTime + " unidades de tempo.");
                     break;
-                case 2: // Read value
-                    System.out.println("[" + processManager.getCurrentTime() + "] " +
-                        process.getName() + " aguarda entrada...");
-                    interpreter.setWaitingForInput(true);
-                    waitingForInput.set(true);
-                    waitingProcess = process;
-                    break;
+                case 2: // Read value - VERSÃO CORRIGIDA
+                System.out.println("[" + processManager.getCurrentTime() + "] " +
+                    process.getName() + " solicita entrada de dados.");
+                
+                // Simula o valor que foi lido.
+                int simulatedInput = (int)(Math.random() * 100);
+                interpreter.setAcc(simulatedInput);
+                System.out.println("[" + processManager.getCurrentTime() + "] Valor simulado ("+ simulatedInput +") lido para o ACC de " + process.getName());
+                
+                // Processo é bloqueado para simular a operação de I/O 
+                int readBlockTime = (int)(Math.random() * 3) + 3;
+                processManager.blockProcess(process, readBlockTime);
+                System.out.println("[" + processManager.getCurrentTime() + "] " +
+                    process.getName() + " bloqueado por " + readBlockTime + " unidades de tempo.");
+                break;
             }
         });
     }
