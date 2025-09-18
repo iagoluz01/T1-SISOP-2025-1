@@ -10,7 +10,7 @@
 1. Abra um terminal na pasta do projeto
 2. Execute:
    ```
-   compile_and_run.bat
+   ./compile_and_run.bat
    ```
 
 ### No Linux/macOS:
